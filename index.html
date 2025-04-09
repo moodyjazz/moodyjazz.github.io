@@ -113,9 +113,7 @@
       const today = data[0]; // most recent puzzle
 
       // ✅ Insert today's puzzle
-      const mainPuzzleDate = new Date(today.date);
-      
-      // Adjust date to local timezone explicitly
+      const mainPuzzleDate = new Date(today.date + "T00:00:00Z"); // Explicitly parse to UTC
       const formattedDate = mainPuzzleDate.toLocaleDateString(undefined, {
         year: 'numeric', month: 'short', day: 'numeric'
       });
@@ -134,15 +132,12 @@
       const archive = data.slice(1, 11);
       archive.forEach(puzzle => {
         const li = document.createElement('li');
-        const date = new Date(puzzle.date);
-        
-        // Adjust date to local timezone explicitly
+        const date = new Date(puzzle.date + "T00:00:00Z"); // Explicitly parse to UTC
         const formattedDate = date.toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'short',
           day: 'numeric'
         });
-
         li.innerHTML = `
           <a href="${puzzle.filename}">${puzzle.title}</a> ${formattedDate}
           <details>
@@ -158,6 +153,7 @@
       console.error('Error fetching puzzle list:', error);
     });
 </script>
+
 
 
 </body>
