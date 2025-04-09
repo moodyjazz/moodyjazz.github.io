@@ -53,4 +53,104 @@
 
     details {
       display: inline;
-      margin-left:
+      margin-left: 10px;
+    }
+
+    details[open] p {
+      display: block;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
+      }
+      h2 {
+        font-size: 1.2em;
+      }
+      .pm-attribution-div {
+        font-size: 10px;
+      }
+      iframe {
+        height: 500px;
+      }
+    }
+
+    body::after {
+      content: '';
+      display: block;
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>moody jazz minis</h1>
+  <p>play the most recent crossword, or scroll down for more. crosswords uploaded daily at 10 PM EST. there's a join function so you can play with friends too if you click the person icon with the plus symbol.</p>
+  <br>
+
+  <!-- 🔥 This is where the latest puzzle will be injected -->
+  <div id="latest-puzzle"></div>
+
+  <br>
+  <h2>archive</h2>
+  <p>click the <u><b>puzzle</b></u> to play. click <b>jonathan's notes</b> for commentary—please note there may be <b>spoilers</b>. open at your own discretion</p>
+
+  <ol id="archive">
+    <!-- Archive will be populated here -->
+  </ol>
+
+  <script>
+    fetch('puzzles.json')
+      .then(response => response.json())
+      .then(data => {
+        const latestPuzzleContainer = document.getElementById('latest-puzzle');
+        const archiveList = document.getElementById('archive');
+
+        // Sort newest first
+        data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        // 🧩 Insert latest puzzle
+        const latest = data[0];
+        const latestDate = new Date(latest.date).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+
+        latestPuzzleContainer.innerHTML = `
+          <h2>${latest.title} (${latestDate})</h2>
+          <iframe
+            src="${latest.iframe}"
+            style="border:none; width: 100%; height: 600px;"
+            allow="web-share; fullscreen"
+            aria-label="Puzzle Me Game">
+          </iframe>
+        `;
+
+        // 📚 Insert archive list
+        const recent = data.slice(0, 10);
+        recent.forEach(puzzle => {
+          const li = document.createElement('li');
+          const date = new Date(puzzle.date).toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+          li.innerHTML = `
+            <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
+            <details>
+              <summary>jonathan's notes</summary>
+              <p>${puzzle.notes}</p>
+            </details>
+          `;
+          archiveList.appendChild(li);
+        });
+      })
+      .catch(error => {
+        document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
+        console.error('Error fetching puzzle list:', error);
+      });
+  </script>
+</body>
+</html>
