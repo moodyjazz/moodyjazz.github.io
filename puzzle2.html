@@ -29,6 +29,7 @@
       height: 100vh;
       padding: 10px 0;
       padding-top: 80px; /* Padding to compensate for fixed clue bar */
+      overflow-y: auto; /* Ensure no stretching when scrolling */
     }
 
     /* For the crossword iframe */
@@ -74,14 +75,14 @@
 
       /* Adjust the keyboard size for mobile */
       .keyboard {
-        font-size: 1.2em; /* Larger keys for better mobile usability */
+        font-size: 1.5em; /* Increase font size for larger keys */
         grid-template-columns: repeat(10, 1fr); /* Ensure keyboard fits across the screen */
-        gap: 5px; /* Adjust the gap between keys */
+        gap: 8px; /* Increase gap between keys for better touchability */
       }
 
       /* Ensure buttons fit well on mobile */
       .keyboard button {
-        padding: 10px; /* Larger buttons for easier touch interaction */
+        padding: 12px; /* Larger buttons for easier touch interaction */
       }
     }
 
