@@ -129,7 +129,7 @@
         const li = document.createElement('li');
         const date = new Date(puzzle.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
         li.innerHTML = 
-          <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
+            <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
           <details>
             <summary>jonathan's notes</summary>
             <p>${puzzle.notes}</p>
