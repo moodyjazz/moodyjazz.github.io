@@ -3,221 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>moody jazz minis</title>
-
+  <title>Embedded Crossword</title>
   <style>
-    /* Reset default styles */
     body, html {
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     }
 
-    /* Base styles for body */
-    body {
-      background-color: #e6f0fa; /* Light blue background */
-      color: #111;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      height: 100%;
-      overflow-x: hidden;
-    }
-
-    /* Main content area */
-    main {
-      width: 100%;
-      padding: 20px;
-      overflow-y: auto;
-      flex-grow: 1;
-    }
-
-    /* For crossword iframe */
     iframe {
       width: 100%;
-      height: 70vh; /* Adjusted height for better fit on desktop */
+      height: 90vh;
       border: none;
-      margin-bottom: 20px;
-    }
-
-    /* Clue bar: Keep it fixed at top */
-    .clue-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px; /* Clue bar height */
-      background-color: #f4f4f4; /* Background color */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.2em;
-      z-index: 1000;
-    }
-
-    /* Keyboard container */
-    .keyboard {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 8px;
-      padding: 20px;
-      justify-items: center;
-    }
-
-    /* Keyboard buttons */
-    .keyboard button {
-      font-size: 1.5em;
-      padding: 10px 15px;
-      width: 40px;
-      height: 40px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-      transition: background-color 0.3s;
-    }
-
-    .keyboard button:hover {
-      background-color: #e0e0e0;
-    }
-
-    /* Mobile-specific styles */
-    @media (max-width: 600px) {
-      /* Adjust crossword iframe height for mobile */
-      iframe {
-        height: 60vh; /* Adjust height for mobile */
-      }
-
-      /* Adjust clue bar size for mobile */
-      .clue-bar {
-        height: 50px;
-        font-size: 1em;
-        padding: 5px 10px;
-      }
-
-      /* Mobile keyboard tweaks */
-      .keyboard {
-        grid-template-columns: repeat(9, 1fr); /* Fit better on small screens */
-        gap: 6px;
-      }
-
-      /* Mobile button size */
-      .keyboard button {
-        font-size: 1.3em;
-        padding: 12px;
-        width: 35px;
-        height: 35px;
-      }
-    }
-
-    /* Desktop-specific adjustments */
-    @media (min-width: 601px) {
-      iframe {
-        height: 65vh; /* Adjusted height for desktop */
-      }
-
-      /* Ensure crossword grid size on desktop is smaller */
-      .keyboard {
-        grid-template-columns: repeat(10, 1fr); /* 10 buttons per row */
-        gap: 8px;
-      }
-
-      .keyboard button {
-        font-size: 1.4em;
-        padding: 12px;
-        width: 45px;
-        height: 45px;
-      }
-    }
-
-    /* Prevent content from being hidden behind fixed elements */
-    body {
-      padding-top: 80px; /* Prevent hidden content under the clue bar */
     }
   </style>
 </head>
-
 <body>
-  <!-- Clue bar (fixed to top) -->
-  <div class="clue-bar">
-    <p>Clue bar content here</p>
-  </div>
-
-  <main>
-    <h1>moody jazz minis</h1>
-    <p>
-      Play the most recent crossword, or scroll down for more. <strong>Crosswords uploaded daily at 10 PM EST.</strong>
-      If you log in, you can see the daily leaderboard for each puzzle you complete.
-    </p>
-
-    <!-- Latest puzzle -->
-    <div id="latest-puzzle"></div>
-
-    <h2>Archive</h2>
-    <p>
-      Click the <u><b>puzzle</b></u> to play. Click <b>Jonathan's notes</b> for commentary — please note there may be <b>spoilers</b>.
-      Open at your own discretion.
-    </p>
-
-    <ol id="archive">
-      <!-- Archive will be populated here -->
-    </ol>
-  </main>
-
-  <script>
-    fetch('puzzles.json')
-      .then(response => response.json())
-      .then(data => {
-        const archiveList = document.getElementById('archive');
-        const latestPuzzleContainer = document.getElementById('latest-puzzle');
-
-        data.sort((a, b) => new Date(b.date) - new Date(a.date));
-        const today = data[0];
-
-        const mainPuzzleDate = new Date(today.date + "T00:00:00Z");
-        const formattedDate = mainPuzzleDate.toLocaleDateString("en-US", {
-          timeZone: 'UTC',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        });
-
-        latestPuzzleContainer.innerHTML = `
-          <h2>${today.title} – ${formattedDate}</h2>
-          <iframe
-            src="${today.iframe}"
-            allow="web-share; fullscreen"
-            aria-label="Puzzle Me Game">
-          </iframe>
-        `;
-
-        const archive = data.slice(1, 11);
-        archive.forEach(puzzle => {
-          const li = document.createElement('li');
-          const date = new Date(puzzle.date + "T00:00:00Z");
-          const formatted = date.toLocaleDateString("en-US", {
-            timeZone: 'UTC',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          });
-
-          li.innerHTML = `
-            <a href="${puzzle.filename}">${puzzle.title}</a> – ${formatted}
-            <details>
-              <summary>Jonathan's notes</summary>
-              <p>${puzzle.notes}</p>
-            </details>
-          `;
-          archiveList.appendChild(li);
-        });
-      })
-      .catch(error => {
-        document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
-        console.error('Error fetching puzzle list:', error);
-      });
-  </script>
+  <iframe 
+    src="https://crosshare.org/embed/5DqNDSJ9OpuEwGX2rs96/U8TOXz4jHSdVHDzl7e4JjNFjx1c2" 
+    frameborder="0" 
+    allowfullscreen="true" 
+    allowtransparency="true" 
+    allow="clipboard-write *">
+  </iframe>
 </body>
 </html>
