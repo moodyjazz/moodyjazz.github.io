@@ -6,7 +6,6 @@
   <title>moody jazz minis</title>
 
   <style>
-    /* Reset default styles */
     body, html {
       margin: 0;
       padding: 0;
@@ -14,7 +13,7 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     }
 
-    /* Base styles for body */
+    /* Body styling */
     body {
       background-color: #e6f0fa; /* Light blue background */
       color: #111;
@@ -24,86 +23,32 @@
       justify-content: flex-start;
       align-items: center;
       height: 100%;
-      overflow-x: hidden;
     }
 
-    /* Main content area */
     main {
       width: 100%;
       padding: 20px;
       overflow-y: auto;
-      flex-grow: 1;
     }
 
-    /* For crossword iframe */
     iframe {
       width: 100%;
-      height: 70vh; /* Adjusted height for better fit on desktop */
+      height: 70vh;
       border: none;
       margin-bottom: 20px;
     }
 
-    /* Clue bar: Keep it fixed at top */
-    .clue-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px; /* Clue bar height */
-      background-color: #f4f4f4; /* Background color */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.2em;
-      z-index: 1000;
-    }
-
-    /* Keyboard container */
-    .keyboard {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 8px;
-      padding: 20px;
-      justify-items: center;
-    }
-
-    /* Keyboard buttons */
-    .keyboard button {
-      font-size: 1.5em;
-      padding: 10px 15px;
-      width: 40px;
-      height: 40px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-      transition: background-color 0.3s;
-    }
-
-    .keyboard button:hover {
-      background-color: #e0e0e0;
-    }
-
-    /* Mobile-specific styles */
+    /* Mobile-specific keyboard tweaks */
     @media (max-width: 600px) {
-      /* Adjust crossword iframe height for mobile */
       iframe {
-        height: 60vh; /* Adjust height for mobile */
+        height: 60vh;
       }
 
-      /* Adjust clue bar size for mobile */
-      .clue-bar {
-        height: 50px;
-        font-size: 1em;
-        padding: 5px 10px;
-      }
-
-      /* Mobile keyboard tweaks */
       .keyboard {
-        grid-template-columns: repeat(9, 1fr); /* Fit better on small screens */
+        grid-template-columns: repeat(9, 1fr);
         gap: 6px;
       }
 
-      /* Mobile button size */
       .keyboard button {
         font-size: 1.3em;
         padding: 12px;
@@ -112,16 +57,10 @@
       }
     }
 
-    /* Desktop-specific adjustments */
+    /* Desktop-specific tweaks */
     @media (min-width: 601px) {
       iframe {
-        height: 65vh; /* Adjusted height for desktop */
-      }
-
-      /* Ensure crossword grid size on desktop is smaller */
-      .keyboard {
-        grid-template-columns: repeat(10, 1fr); /* 10 buttons per row */
-        gap: 8px;
+        height: 65vh;
       }
 
       .keyboard button {
@@ -131,20 +70,10 @@
         height: 45px;
       }
     }
-
-    /* Prevent content from being hidden behind fixed elements */
-    body {
-      padding-top: 80px; /* Prevent hidden content under the clue bar */
-    }
   </style>
 </head>
 
 <body>
-  <!-- Clue bar (fixed to top) -->
-  <div class="clue-bar">
-    <p>Clue bar content here</p>
-  </div>
-
   <main>
     <h1>moody jazz minis</h1>
     <p>
@@ -221,3 +150,4 @@
   </script>
 </body>
 </html>
+
