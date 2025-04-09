@@ -100,57 +100,53 @@
     <!-- Archive will be populated here -->
   </ol>
 
-  <script>
-    fetch('puzzles.json')
-      .then(response => response.json())
-      .then(data => {
-        const latestPuzzleContainer = document.getElementById('latest-puzzle');
-        const archiveList = document.getElementById('archive');
+<script>
+  fetch('puzzles.json')
+    .then(response => response.json())
+    .then(data => {
+      const archiveList = document.getElementById('archive');
+      // Sort newest first
+      data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        // Sort newest first
-        data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const today = data[0]; // most recent puzzle
 
-        // 🧩 Insert latest puzzle
-        const latest = data[0];
-        const latestDate = new Date(latest.date).toLocaleDateString(undefined, {
+      // ✅ Show today's puzzle at the top
+      const mainPuzzleDate = new Date(today.date).toLocaleDateString(undefined, {
+        year: 'numeric', month: 'short', day: 'numeric'
+      });
+      const mainPuzzleHTML = `
+        <h2>${today.title} ${mainPuzzleDate}</h2>
+        <iframe
+          src="${today.iframe}"
+          style="border:none; width: 100%; height: 600px;"
+          allow="web-share; fullscreen"
+          aria-label="Puzzle Me Game">
+        </iframe>
+      `;
+      const body = document.querySelector('body');
+      body.insertAdjacentHTML('afterbegin', mainPuzzleHTML); // adds today's puzzle to the top
+
+      // 🗃️ Build archive, skipping the first (most recent) puzzle
+      const archive = data.slice(1, 11); // skip today’s puzzle
+      archive.forEach(puzzle => {
+        const li = document.createElement('li');
+        const date = new Date(puzzle.date).toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'short',
           day: 'numeric'
         });
-
-        latestPuzzleContainer.innerHTML = `
-          <h2>${latest.title} (${latestDate})</h2>
-          <iframe
-            src="${latest.iframe}"
-            style="border:none; width: 100%; height: 600px;"
-            allow="web-share; fullscreen"
-            aria-label="Puzzle Me Game">
-          </iframe>
+        li.innerHTML = `
+          <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
+          <details>
+            <summary>jonathan's notes</summary>
+            <p>${puzzle.notes}</p>
+          </details>
         `;
-
-        // 📚 Insert archive list
-        const recent = data.slice(0, 10);
-        recent.forEach(puzzle => {
-          const li = document.createElement('li');
-          const date = new Date(puzzle.date).toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          });
-          li.innerHTML = `
-            <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
-            <details>
-              <summary>jonathan's notes</summary>
-              <p>${puzzle.notes}</p>
-            </details>
-          `;
-          archiveList.appendChild(li);
-        });
-      })
-      .catch(error => {
-        document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
-        console.error('Error fetching puzzle list:', error);
+        archiveList.appendChild(li);
       });
-  </script>
+    })
+    .catch(error => {
+      document.getElementById('
+
 </body>
 </html>
