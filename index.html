@@ -13,6 +13,7 @@
       background-color: #e6f0fa; /* Light blue background */
       color: #111;
       line-height: 1.6;
+      overflow-x: hidden; /* Prevent horizontal scroll */
     }
 
     header {
@@ -47,10 +48,11 @@
 
     iframe {
       width: 100%;
-      height: 100vh; /* Adjust to fill the height of the screen */
+      height: 600px; /* Set the iframe height to a fixed value */
       border: none;
       display: block;
       margin: 0 auto;
+      position: relative; /* Prevent the iframe from moving */
     }
 
     ol {
@@ -99,20 +101,25 @@
       }
 
       iframe {
-        height: 90vh; /* Make the iframe smaller to accommodate keyboard */
-        width: 100vw; /* Full width on mobile */
-        margin-top: 0; /* Remove any default margin */
+        height: 90vh; /* Full height of the viewport */
+        width: 100vw; /* Full width of the viewport */
+        margin-top: 0;
+        position: fixed; /* Fix it to the top of the screen */
+        top: 0;
+        left: 0;
+        transform: scale(1.2); /* Scale up the iframe content */
+        transform-origin: 0 0; /* Ensure scaling starts from the top-left */
       }
 
       p {
         max-width: none; /* Remove max-width to make sure text stretches to full screen */
       }
-    }
 
-    body::after {
-      content: '';
-      display: block;
-      height: 100px;
+      body::after {
+        content: '';
+        display: block;
+        height: 100px;
+      }
     }
   </style>
 </head>
@@ -141,58 +148,59 @@
     </ol>
   </main>
 
-  <script>
-    fetch('puzzles.json')
-      .then(response => response.json())
-      .then(data => {
-        const archiveList = document.getElementById('archive');
-        const latestPuzzleContainer = document.getElementById('latest-puzzle');
+ <script>
+  fetch('puzzles.json')
+    .then(response => response.json())
+    .then(data => {
+      const archiveList = document.getElementById('archive');
+      const latestPuzzleContainer = document.getElementById('latest-puzzle');
 
-        data.sort((a, b) => new Date(b.date) - new Date(a.date));
-        const today = data[0];
+      data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const today = data[0];
 
-        const mainPuzzleDate = new Date(today.date + "T00:00:00Z");
-        const formattedDate = mainPuzzleDate.toLocaleDateString("en-US", {
+      const mainPuzzleDate = new Date(today.date + "T00:00:00Z");
+      const formattedDate = mainPuzzleDate.toLocaleDateString("en-US", {
+        timeZone: 'UTC',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+
+      latestPuzzleContainer.innerHTML = `
+        <h2>${today.title} – ${formattedDate}</h2>
+        <iframe
+          src="${today.iframe}&leaderboard=true"  <!-- Add this to ensure leaderboard visibility -->
+          allow="web-share; fullscreen"
+          aria-label="Puzzle Me Game">
+        </iframe>
+      `;
+
+      const archive = data.slice(1, 11);
+      archive.forEach(puzzle => {
+        const li = document.createElement('li');
+        const date = new Date(puzzle.date + "T00:00:00Z");
+        const formatted = date.toLocaleDateString("en-US", {
           timeZone: 'UTC',
           year: 'numeric',
           month: 'short',
           day: 'numeric'
         });
 
-        latestPuzzleContainer.innerHTML = `
-          <h2>${today.title} – ${formattedDate}</h2>
-          <iframe
-            src="${today.iframe}?leaderboard=1"
-            allow="web-share; fullscreen"
-            aria-label="Puzzle Me Game">
-          </iframe>
+        li.innerHTML = `
+          <a href="${puzzle.filename}">${puzzle.title}</a> – ${formatted}
+          <details>
+            <summary>jonathan's notes</summary>
+            <p>${puzzle.notes}</p>
+          </details>
         `;
-
-        const archive = data.slice(1, 11);
-        archive.forEach(puzzle => {
-          const li = document.createElement('li');
-          const date = new Date(puzzle.date + "T00:00:00Z");
-          const formatted = date.toLocaleDateString("en-US", {
-            timeZone: 'UTC',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          });
-
-          li.innerHTML = `
-            <a href="${puzzle.filename}">${puzzle.title}</a> – ${formatted}
-            <details>
-              <summary>jonathan's notes</summary>
-              <p>${puzzle.notes}</p>
-            </details>
-          `;
-          archiveList.appendChild(li);
-        });
-      })
-      .catch(error => {
-        document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
-        console.error('Error fetching puzzle list:', error);
+        archiveList.appendChild(li);
       });
-  </script>
+    })
+    .catch(error => {
+      document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
+      console.error('Error fetching puzzle list:', error);
+    });
+</script>
+
 </body>
 </html>
