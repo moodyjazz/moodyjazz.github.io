@@ -9,8 +9,8 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-      background-color: #e6f0fa; /* Light blue background */
+      font-family: "Georgia", serif;
+      background-color: #ffffff;
       color: #111;
       line-height: 1.6;
     }
@@ -19,101 +19,91 @@
       background-color: #ffffff;
       border-bottom: 1px solid #ccc; /* Thin divider */
       padding: 15px 40px;
+      text-align: center;
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.9em;
-      font-family: Georgia, serif;
+      font-size: 2em;
       font-weight: normal;
     }
 
     main {
-      padding: 30px 40px;
+      padding: 20px 40px;
+      text-align: center;
     }
 
     h2 {
-      font-family: Georgia, serif;
+      font-size: 1.5em;
       font-weight: normal;
-      margin: 30px 0 10px;
-      text-align: left;
+      margin-bottom: 15px;
     }
 
     p {
       margin: 0 0 20px;
       text-align: left;
       max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     iframe {
       width: 100%;
-      height: 100vh; /* Adjust to fill the height of the screen */
+      height: 600px;
       border: none;
-      display: block;
-      margin: 0 auto;
     }
 
-    ol {
-      list-style-type: decimal;
-      padding-left: 40px;
-      margin: 0;
+    .crossword-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      margin-top: 50px;
     }
 
-    li {
-      margin-bottom: 10px;
+    /* Styling for crossword grid */
+    .crossword-grid {
+      width: 100%;
+      max-width: 600px; /* Adjust this to change crossword size */
+      height: 100%;
+      max-height: 600px;
+      display: grid;
+      grid-template-columns: repeat(15, 1fr); /* Assuming 15x15 grid */
+      gap: 1px;
+      background-color: #fff;
+      border: 1px solid #ccc;
     }
 
-    a {
-      color: #0000ee;
-      text-decoration: none;
+    .crossword-grid div {
+      background-color: white;
+      color: black;
+      text-align: center;
+      font-size: 1.2em;
+      padding: 10px;
+      border: 1px solid #ddd;
     }
 
-    a:hover {
-      text-decoration: underline;
+    /* Remove dark mode, keep things light */
+    .crossword-grid .filled {
+      background-color: #f0f0f0;
     }
 
-    details summary {
-      cursor: pointer;
-      color: #555;
-      font-size: 0.95rem;
-    }
-
-    details[open] p {
-      margin-top: 5px;
-      font-size: 0.95rem;
-      color: #333;
-    }
-
-    /* Custom styles for mobile */
     @media (max-width: 600px) {
-      header, main {
-        padding: 10px 20px;
-      }
-
-      header h1 {
-        font-size: 1.5em;
-      }
-
-      h2 {
-        font-size: 1.2em;
-      }
-
       iframe {
-        height: 90vh; /* Make the iframe smaller to accommodate keyboard */
-        width: 100vw; /* Full width on mobile */
-        margin-top: 0; /* Remove any default margin */
+        height: 400px;
       }
 
-      p {
-        max-width: none; /* Remove max-width to make sure text stretches to full screen */
+      .crossword-container {
+        flex-direction: column;
+      }
+
+      .crossword-grid {
+        max-width: 100%;
+        font-size: 1em;
+        gap: 0;
       }
     }
 
-    body::after {
-      content: '';
-      display: block;
-      height: 100px;
-    }
   </style>
 </head>
 
@@ -124,16 +114,21 @@
 
   <main>
     <p>
-      play the most recent crossword, or scroll down for more. 
-      <strong>crosswords uploaded daily at 10 PM EST.</strong> if you login, you can see the daily leaderboard for each puzzle you complete.
+      Play the most recent crossword or scroll down for more. Crosswords uploaded daily at 10 PM EST. Log in to see the daily leaderboard for each puzzle you complete.
     </p>
 
-    <!-- 🔥 Latest puzzle goes here -->
-    <div id="latest-puzzle"></div>
+    <div class="crossword-container">
+      <!-- 🔥 Latest puzzle goes here -->
+      <iframe
+        src="https://crosshare.org/crosswords/5DqNDSJ9OpuEwGX2rs96/moodyjazz-mini-2?theme=light"
+        allow="web-share; fullscreen"
+        aria-label="Puzzle Me Game">
+      </iframe>
+    </div>
 
-    <h2>archive</h2>
+    <h2>Archive</h2>
     <p>
-      click the <u><b>puzzle</b></u> to play. click <b>jonathan's notes</b> for commentary — please note there may be <b>spoilers</b>. open at your own discretion
+      Click the <u><b>puzzle</b></u> to play. Click <b>Jonathan's notes</b> for commentary — please note there may be <b>spoilers</b>. Open at your own discretion.
     </p>
 
     <ol id="archive">
@@ -146,7 +141,7 @@
       .then(response => response.json())
       .then(data => {
         const archiveList = document.getElementById('archive');
-        const latestPuzzleContainer = document.getElementById('latest-puzzle');
+        const latestPuzzleContainer = document.querySelector('.crossword-container');
 
         data.sort((a, b) => new Date(b.date) - new Date(a.date));
         const today = data[0];
@@ -162,7 +157,7 @@
         latestPuzzleContainer.innerHTML = `
           <h2>${today.title} – ${formattedDate}</h2>
           <iframe
-            src="${today.iframe}?leaderboard=1"
+            src="${today.iframe}?theme=light"
             allow="web-share; fullscreen"
             aria-label="Puzzle Me Game">
           </iframe>
@@ -182,7 +177,7 @@
           li.innerHTML = `
             <a href="${puzzle.filename}">${puzzle.title}</a> – ${formatted}
             <details>
-              <summary>jonathan's notes</summary>
+              <summary>Jonathan's notes</summary>
               <p>${puzzle.notes}</p>
             </details>
           `;
