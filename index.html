@@ -113,12 +113,13 @@
       const today = data[0]; // most recent puzzle
 
       // ✅ Insert today's puzzle
-      const mainPuzzleDate = new Date(today.date + "T00:00:00Z").toLocaleDateString(undefined, {
+      const mainPuzzleDate = new Date(today.date); // Use the date directly
+      const formattedDate = mainPuzzleDate.toLocaleDateString(undefined, {
         year: 'numeric', month: 'short', day: 'numeric'
       });
 
       latestPuzzleContainer.innerHTML = `
-        <h2>${today.title} ${mainPuzzleDate}</h2>
+        <h2>${today.title} ${formattedDate}</h2>
         <iframe
           src="${today.iframe}"
           style="border:none; width: 100%; height: 600px;"
@@ -131,13 +132,14 @@
       const archive = data.slice(1, 11);
       archive.forEach(puzzle => {
         const li = document.createElement('li');
-        const date = new Date(puzzle.date + "T00:00:00Z").toLocaleDateString(undefined, {
+        const date = new Date(puzzle.date); // Use the date directly
+        const formattedDate = date.toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'short',
           day: 'numeric'
         });
         li.innerHTML = `
-          <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
+          <a href="${puzzle.filename}">${puzzle.title}</a> ${formattedDate}
           <details>
             <summary>jonathan's notes</summary>
             <p>${puzzle.notes}</p>
