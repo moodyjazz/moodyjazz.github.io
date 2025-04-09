@@ -5,66 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>moody jazz minis</title>
 
-  <!-- ✨ Typography upgrades -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #f7f7f7;
+      padding: 0 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background-color: #ffffff;
       color: #111;
+      line-height: 1.6;
     }
 
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
-    }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      margin-top: 2rem;
-      margin-bottom: 0.3rem;
+    h1, h2 {
+      font-family: Georgia, serif;
+      font-weight: normal;
+      margin: 20px 0 10px;
+      text-align: left;
     }
 
     p {
-      font-size: 1rem;
-      margin: 0 0 1.2rem;
-      line-height: 1.6;
+      margin: 0 0 20px;
+      text-align: left;
+      max-width: 700px;
     }
 
     iframe {
       width: 100%;
       height: 600px;
       border: none;
-      border-radius: 8px;
     }
 
     ol {
-      list-style: decimal;
-      padding-left: 1.5rem;
+      list-style-type: decimal;
+      padding: 0 20px;
+      margin: 0;
     }
 
     li {
-      margin-bottom: 0.8rem;
+      margin-bottom: 10px;
     }
 
     a {
-      color: #0056b3;
+      color: #0000ee;
       text-decoration: none;
-      font-weight: 500;
     }
 
     a:hover {
@@ -75,66 +57,54 @@
       cursor: pointer;
       color: #555;
       font-size: 0.95rem;
-      margin-top: 0.3rem;
     }
 
     details[open] p {
-      margin-top: 0.3rem;
+      margin-top: 5px;
       font-size: 0.95rem;
       color: #333;
     }
 
-    footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #888;
-      margin-top: 3rem;
-    }
-
     @media (max-width: 600px) {
-      .container {
-        padding: 1rem;
-      }
-
       h1 {
-        font-size: 1.8rem;
+        font-size: 1.5em;
       }
 
       h2 {
-        font-size: 1.2rem;
+        font-size: 1.2em;
       }
 
       iframe {
         height: 500px;
       }
     }
+
+    body::after {
+      content: '';
+      display: block;
+      height: 100px;
+    }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>moody jazz minis</h1>
-    <p>
-      Play the most recent crossword, or scroll down for more. 
-      <strong>Crosswords upload daily at 10 PM EST.</strong> You can even play with friends — click the person icon with a plus sign to start a group game.
-    </p>
+  <h1>moody jazz minis</h1>
+  <p>
+    play the most recent crossword, or scroll down for more. 
+    <strong>crosswords uploaded daily at 10 PM EST.</strong> there's a join function so you can play with friends too if you click the person icon with the plus symbol.
+  </p>
 
-    <!-- 🔥 Latest puzzle appears here -->
-    <div id="latest-puzzle"></div>
+  <!-- 🔥 Latest puzzle goes here -->
+  <div id="latest-puzzle"></div>
 
-    <h2>archive</h2>
-    <p>
-      Click the <strong><u>puzzle</u></strong> to play. Click <strong>jonathan's notes</strong> for commentary — please note there may be <strong>spoilers</strong>.
-    </p>
+  <h2>archive</h2>
+  <p>
+    click the <u><b>puzzle</b></u> to play. click <b>jonathan's notes</b> for commentary — please note there may be <b>spoilers</b>. open at your own discretion
+  </p>
 
-    <ol id="archive">
-      <!-- Archive populated via JS -->
-    </ol>
-
-    <footer>
-      © 2025 moody jazz crosswords — updated daily • hosted on GitHub Pages
-    </footer>
-  </div>
+  <ol id="archive">
+    <!-- Archive will be populated here -->
+  </ol>
 
   <script>
     fetch('puzzles.json')
@@ -143,7 +113,6 @@
         const archiveList = document.getElementById('archive');
         const latestPuzzleContainer = document.getElementById('latest-puzzle');
 
-        // Sort newest first
         data.sort((a, b) => new Date(b.date) - new Date(a.date));
         const today = data[0];
 
@@ -164,7 +133,6 @@
           </iframe>
         `;
 
-        // 📚 Build archive (excluding latest)
         const archive = data.slice(1, 11);
         archive.forEach(puzzle => {
           const li = document.createElement('li');
