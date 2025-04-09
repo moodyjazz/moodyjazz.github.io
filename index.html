@@ -13,6 +13,7 @@
       background-color: #e6f0fa; /* Light blue background */
       color: #111;
       line-height: 1.6;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
     }
 
     header {
@@ -26,13 +27,11 @@
       font-size: 1.9em;
       font-family: Georgia, serif;
       font-weight: normal;
+      text-align: center;
     }
 
     main {
       padding: 30px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
     h2 {
@@ -87,7 +86,7 @@
       color: #333;
     }
 
-    /* Custom styles for mobile */
+    /* Mobile styles */
     @media (max-width: 600px) {
       header, main {
         padding: 10px 20px;
@@ -97,13 +96,9 @@
         font-size: 1.5em;
       }
 
-      h2 {
-        font-size: 1.2em;
-      }
-
       iframe {
-        height: 90vh; /* Make the iframe smaller to accommodate keyboard */
-        width: 100vw; /* Full width on mobile */
+        height: 70vh; /* Make the iframe smaller to fit better on mobile */
+        width: 100%;
         margin-top: 0; /* Remove any default margin */
       }
 
@@ -112,11 +107,6 @@
       }
     }
 
-    body::after {
-      content: '';
-      display: block;
-      height: 100px;
-    }
   </style>
 </head>
 
