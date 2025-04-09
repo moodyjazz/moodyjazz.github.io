@@ -13,7 +13,6 @@
       background-color: #e6f0fa; /* Light blue background */
       color: #111;
       line-height: 1.6;
-      overflow-x: hidden; /* Prevent horizontal scroll */
     }
 
     header {
@@ -48,11 +47,9 @@
 
     iframe {
       width: 100%;
-      height: 600px; /* Set the iframe height to a fixed value */
+      height: 100vh; /* Use full screen height on mobile */
       border: none;
-      display: block;
-      margin: 0 auto;
-      position: relative; /* Prevent the iframe from moving */
+      display: block; /* Remove extra space below iframe */
     }
 
     ol {
@@ -86,7 +83,6 @@
       color: #333;
     }
 
-    /* Custom styles for mobile */
     @media (max-width: 600px) {
       header, main {
         padding: 10px 20px;
@@ -101,25 +97,29 @@
       }
 
       iframe {
-        height: 90vh; /* Full height of the viewport */
-        width: 100vw; /* Full width of the viewport */
-        margin-top: 0;
-        position: fixed; /* Fix it to the top of the screen */
-        top: 0;
-        left: 0;
-        transform: scale(1.2); /* Scale up the iframe content */
-        transform-origin: 0 0; /* Ensure scaling starts from the top-left */
+        height: 90vh;  /* Use most of the screen height for the crossword */
+        transform: scale(1);  /* Reset scaling for mobile */
+        transform-origin: 0 0;
       }
 
-      p {
-        max-width: none; /* Remove max-width to make sure text stretches to full screen */
+      /* Ensure keyboard is appropriately sized and fits the screen */
+      .keyboard {
+        font-size: 1.5rem; /* Increase key size for easier tapping */
+        padding: 10px;
       }
 
-      body::after {
-        content: '';
-        display: block;
-        height: 100px;
+      .keyboard button {
+        width: 10vw; /* Adjust key width for mobile */
+        height: 10vw; /* Adjust key height for mobile */
+        font-size: 1.5rem;
+        margin: 5px;
       }
+    }
+
+    body::after {
+      content: '';
+      display: block;
+      height: 100px;
     }
   </style>
 </head>
@@ -148,59 +148,58 @@
     </ol>
   </main>
 
- <script>
-  fetch('puzzles.json')
-    .then(response => response.json())
-    .then(data => {
-      const archiveList = document.getElementById('archive');
-      const latestPuzzleContainer = document.getElementById('latest-puzzle');
+  <script>
+    fetch('puzzles.json')
+      .then(response => response.json())
+      .then(data => {
+        const archiveList = document.getElementById('archive');
+        const latestPuzzleContainer = document.getElementById('latest-puzzle');
 
-      data.sort((a, b) => new Date(b.date) - new Date(a.date));
-      const today = data[0];
+        data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const today = data[0];
 
-      const mainPuzzleDate = new Date(today.date + "T00:00:00Z");
-      const formattedDate = mainPuzzleDate.toLocaleDateString("en-US", {
-        timeZone: 'UTC',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-
-      latestPuzzleContainer.innerHTML = `
-        <h2>${today.title} – ${formattedDate}</h2>
-        <iframe
-          src="${today.iframe}&leaderboard=true"  <!-- Add this to ensure leaderboard visibility -->
-          allow="web-share; fullscreen"
-          aria-label="Puzzle Me Game">
-        </iframe>
-      `;
-
-      const archive = data.slice(1, 11);
-      archive.forEach(puzzle => {
-        const li = document.createElement('li');
-        const date = new Date(puzzle.date + "T00:00:00Z");
-        const formatted = date.toLocaleDateString("en-US", {
+        const mainPuzzleDate = new Date(today.date + "T00:00:00Z");
+        const formattedDate = mainPuzzleDate.toLocaleDateString("en-US", {
           timeZone: 'UTC',
           year: 'numeric',
           month: 'short',
           day: 'numeric'
         });
 
-        li.innerHTML = `
-          <a href="${puzzle.filename}">${puzzle.title}</a> – ${formatted}
-          <details>
-            <summary>jonathan's notes</summary>
-            <p>${puzzle.notes}</p>
-          </details>
+        latestPuzzleContainer.innerHTML = `
+          <h2>${today.title} – ${formattedDate}</h2>
+          <iframe
+            src="${today.iframe}&leaderboard=true"  <!-- Make sure leaderboard is enabled -->
+            allow="web-share; fullscreen"
+            aria-label="Puzzle Me Game">
+          </iframe>
         `;
-        archiveList.appendChild(li);
-      });
-    })
-    .catch(error => {
-      document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
-      console.error('Error fetching puzzle list:', error);
-    });
-</script>
 
+        const archive = data.slice(1, 11);
+        archive.forEach(puzzle => {
+          const li = document.createElement('li');
+          const date = new Date(puzzle.date + "T00:00:00Z");
+          const formatted = date.toLocaleDateString("en-US", {
+            timeZone: 'UTC',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+
+          li.innerHTML = `
+            <a href="${puzzle.filename}">${puzzle.title}</a> – ${formatted}
+            <details>
+              <summary>jonathan's notes</summary>
+              <p>${puzzle.notes}</p>
+            </details>
+          `;
+          archiveList.appendChild(li);
+        });
+      })
+      .catch(error => {
+        document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
+        console.error('Error fetching puzzle list:', error);
+      });
+  </script>
 </body>
 </html>
