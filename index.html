@@ -1,154 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>moody jazz minis</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0 20px; /* Added padding to shift content from the edges */
-            line-height: 1.6;
-            font-family: sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>moody jazz minis</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0 20px;
+      line-height: 1.6;
+      font-family: sans-serif;
+    }
 
-        h1 {
-            margin: 10px 0;
-            text-align: left; /* Align headings to the left */
-            padding-left: 10px; /* Added padding to create space from the edge */
-        }
+    h1, h2 {
+      margin: 10px 0;
+      text-align: left;
+      padding-left: 10px;
+    }
 
-         h2 {
-            margin: 10px 0;
-            text-align: left; /* Align headings to the left */
-            padding-left: 10px; /* Added padding to create space from the edge */
-        }
+    p {
+      margin: 0 0 20px;
+      text-align: left;
+      padding-left: 10px;
+    }
 
-        p {
-            margin: 0 0 20px;
-            text-align: left; /* Left-align paragraph text */
-            padding-left: 10px; /* Added padding for consistency */
-        }
+    iframe {
+      width: 100%;
+      height: 600px;
+      max-height: 600px;
+      border: none;
+    }
 
-        /* Responsive iframe */
-        iframe {
-            width: 100%;
-            height: 600px; /* Adjusted height */
-            max-height: 600px; /* Adjust as necessary */
-            border: none; /* Remove the border for a cleaner look */
-        }
+    .pm-attribution-div {
+      font-size: 12px;
+      color: rgb(102, 102, 102);
+      padding-top: 5px;
+      margin-top: 10px;
+      text-align: center;
+    }
 
-        .pm-attribution-div {
-            font-family: sans-serif;
-            font-size: 12px;
-            color: rgb(102, 102, 102);
-            padding-top: 5px;
-            margin-top: 10px;
-            text-align: center; /* Centered attribution text */
-        }
+    ol {
+      list-style-type: decimal;
+      padding: 0 20px;
+      margin: 0;
+      text-align: left;
+    }
 
-        /* Responsive list styling */
-        ol {
-            list-style-type: decimal; /* Ensured the list is numbered */
-            padding: 0 20px; /* Added padding to the list */
-            margin: 0; /* Reset margin */
-            text-align: left; /* Left-aligned for readability */
-        }
+    li {
+      margin-bottom: 5px;
+      text-align: left;
+    }
 
-        li {
-            margin-bottom: 5px; /* Reduced spacing between list items */
-            text-align: left; /* Align text to the left for better readability */
-        }
-
-        details {
-            display: inline; /* Keep the details inline with the list item */
-            margin-left: 10px; /* Add some spacing */
-        }
-
-        details[open] p {
-            display: block; /* Show notes on a new line when expanded */
-            margin-top: 5px; /* Add some space above the note text */
-        }
-
-        /* Media queries for responsive design */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5em; /* Adjust heading size for mobile */
-            }
-            h2 {
-                font-size: 1.2em; /* Adjust subheading size for mobile */
-            }
-            .pm-attribution-div {
-                font-size: 10px; /* Smaller font for attribution on mobile */
-            }
-            iframe {
-                height: 500px; /* Adjust height for mobile screens */
-            }
-        }
-        /* Space at the bottom of the page */
-        body::after {
-            content: '';
-            display: block;
-            height: 100px; /* Increased height for more space at the bottom */
-        }
-    </style>
-</head>
-    
-<body>
-    <h1>moody jazz minis</h1>
-    <p>play the most recent crossword, or scroll down for more. crosswords uploaded daily at 10 PM EST. there's a join function so you can play with friends too if you click the person icon with the plus symbol.  </p>
-<br>
-
-<h2>puzzle #2 04/08/2025</h2>
-<iframe
-    src="https://puzzleme.amuselabs.com/pmm/crossword?id=8b26a3a9&set=3b182fa908fd41c8de5b0521031deee43bc8eb30261764327be54172e6c82b2d&embed=1"
-    style="border:none; width: 100%; height: 600px;"
-    allow="web-share; fullscreen"
-    aria-label="Puzzle Me Game">
-</iframe>
-
-
-    <br/>
-   <h2>archive</h2>
-<p>click the <u><b>puzzle</b></u> to play. click <b>jonathan's notes</b> for commentary—please note there may be <b>spoilers</b>. open at your own discretion</p>
-
-<ol id="archive">
-  <!-- Puzzle entries will be populated by JavaScript -->
-</ol>
-
-<script>
-  fetch('puzzles.json')
-    .then(response => response.json())
-    .then(data => {
-      const archiveList = document.getElementById('archive');
-      // Sort newest first
-      data.sort((a, b) => new Date(b.date) - new Date(a.date));
-      // Limit to latest 10
-      const recent = data.slice(0, 10);
-      recent.forEach(puzzle => {
-        const li = document.createElement('li');
-        const date = new Date(puzzle.date).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        });
-        li.innerHTML = `
-          <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
-          <details>
-            <summary>jonathan's notes</summary>
-            <p>${puzzle.notes}</p>
-          </details>
-        `;
-        archiveList.appendChild(li);
-      });
-    })
-    .catch(error => {
-      document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
-      console.error('Error fetching puzzle list:', error);
-    });
-</script>
-
-
-</body>
-</html>
-
+    details {
+      display: inline;
+      margin-left:
