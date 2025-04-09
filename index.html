@@ -109,16 +109,40 @@
 
 
     <br/>
-    <h2>archive</h2>
-    <p>click the <u><b>puzzle</b></u> to play. click <b>jonathan's notes</b> for commentary—please note there may be <b>spoilers</b>. open at your own discretion</p>
-    
-    <ol>
-        <li><a href="puzzle1.html">puzzle #1 my first attempt</a> 4/9/25
-            <details name="notes">
-                <summary>jonathan's notes</summary>
-                <p>thank you chat gpt for teaching me how to code this frkn website. this was fun but too hard of a crossword in retrospect especially for a mini so i learned my lesson lmao. i'm going to retroactively name my puzzles too to give people a day to try them without getting any hints. 
-            </details>
-        
-    </ol>
+   <h2>archive</h2>
+<p>click the <u><b>puzzle</b></u> to play. click <b>jonathan's notes</b> for commentary—please note there may be <b>spoilers</b>. open at your own discretion</p>
+
+<ol id="archive">
+  <!-- Puzzle entries will be populated by JavaScript -->
+</ol>
+
+<script>
+  fetch('puzzles.json')
+    .then(response => response.json())
+    .then(data => {
+      const archiveList = document.getElementById('archive');
+      // Sort newest first
+      data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      // Limit to latest 10
+      const recent = data.slice(0, 10);
+      recent.forEach(puzzle => {
+        const li = document.createElement('li');
+        const date = new Date(puzzle.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        li.innerHTML = `
+          <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
+          <details>
+            <summary>jonathan's notes</summary>
+            <p>${puzzle.notes}</p>
+          </details>
+        `;
+        archiveList.appendChild(li);
+      });
+    })
+    .catch(error => {
+      document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
+      console.error('Error fetching puzzle list:', error);
+    });
+</script>
+
 </body>
 </html>
