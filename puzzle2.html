@@ -33,7 +33,8 @@
 
     /* For the crossword iframe */
     iframe {
-      width: 100%;
+      width: 90%; /* Reduce the width slightly for better fitting */
+      max-width: 800px; /* Limit the width to prevent too large on wide screens */
       height: 600px; /* Revert to previous desktop size */
       border: none;
       margin-bottom: 20px; /* Adjust bottom margin if needed */
@@ -60,6 +61,8 @@
       /* Adjust the crossword iframe for mobile */
       iframe {
         height: 65vh; /* Reduced height for mobile */
+        width: 100%; /* Full width on mobile */
+        max-width: none; /* Remove max-width restriction for mobile */
       }
 
       /* Adjust the clue bar size on mobile */
