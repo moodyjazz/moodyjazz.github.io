@@ -6,7 +6,7 @@
   <title>moody jazz minis</title>
 
   <style>
-    /* General styles for body and page */
+    /* Reset default styles */
     body, html {
       margin: 0;
       padding: 0;
@@ -14,89 +14,135 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     }
 
+    /* Base styles for body */
     body {
       background-color: #e6f0fa; /* Light blue background */
       color: #111;
       line-height: 1.6;
-    }
-
-    /* Centering crossword container */
-    main {
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
-      height: 100vh;
-      padding: 10px 0;
-      padding-top: 80px; /* Padding to compensate for fixed clue bar */
-      overflow-y: auto; /* Ensure no stretching when scrolling */
+      justify-content: flex-start;
+      align-items: center;
+      height: 100%;
+      overflow-x: hidden;
     }
 
-    /* For the crossword iframe */
+    /* Main content area */
+    main {
+      width: 100%;
+      padding: 20px;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+
+    /* For crossword iframe */
     iframe {
-      width: 90%; /* Reduce the width slightly for better fitting */
-      max-width: 800px; /* Limit the width to prevent too large on wide screens */
-      height: 600px; /* Revert to previous desktop size */
+      width: 100%;
+      height: 70vh; /* Adjusted height for better fit on desktop */
       border: none;
-      margin-bottom: 20px; /* Adjust bottom margin if needed */
+      margin-bottom: 20px;
     }
 
-    /* Clue bar styles */
+    /* Clue bar: Keep it fixed at top */
     .clue-bar {
-      position: fixed; /* Make it fixed to the top */
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 60px; /* Default height for clue bar */
-      background-color: #f4f4f4; /* Light background color */
+      height: 60px; /* Clue bar height */
+      background-color: #f4f4f4; /* Background color */
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 1.2em;
-      padding: 10px;
-      z-index: 1000; /* Ensure it's on top */
+      z-index: 1000;
+    }
+
+    /* Keyboard container */
+    .keyboard {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      padding: 20px;
+      justify-items: center;
+    }
+
+    /* Keyboard buttons */
+    .keyboard button {
+      font-size: 1.5em;
+      padding: 10px 15px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s;
+    }
+
+    .keyboard button:hover {
+      background-color: #e0e0e0;
     }
 
     /* Mobile-specific styles */
     @media (max-width: 600px) {
-      /* Adjust the crossword iframe for mobile */
+      /* Adjust crossword iframe height for mobile */
       iframe {
-        height: 65vh; /* Reduced height for mobile */
-        width: 100%; /* Full width on mobile */
-        max-width: none; /* Remove max-width restriction for mobile */
+        height: 60vh; /* Adjust height for mobile */
       }
 
-      /* Adjust the clue bar size on mobile */
+      /* Adjust clue bar size for mobile */
       .clue-bar {
-        height: 50px; /* Smaller height for mobile */
-        font-size: 1em; /* Adjust font size inside clue bar */
-        padding: 5px 10px; /* Less padding for mobile fit */
+        height: 50px;
+        font-size: 1em;
+        padding: 5px 10px;
       }
 
-      /* Adjust the keyboard size for mobile */
+      /* Mobile keyboard tweaks */
       .keyboard {
-        font-size: 1.5em; /* Increase font size for larger keys */
-        grid-template-columns: repeat(10, 1fr); /* Ensure keyboard fits across the screen */
-        gap: 8px; /* Increase gap between keys for better touchability */
+        grid-template-columns: repeat(9, 1fr); /* Fit better on small screens */
+        gap: 6px;
       }
 
-      /* Ensure buttons fit well on mobile */
+      /* Mobile button size */
       .keyboard button {
-        padding: 12px; /* Larger buttons for easier touch interaction */
+        font-size: 1.3em;
+        padding: 12px;
+        width: 35px;
+        height: 35px;
       }
     }
 
-    /* Ensure content doesn't get hidden behind fixed elements */
+    /* Desktop-specific adjustments */
+    @media (min-width: 601px) {
+      iframe {
+        height: 65vh; /* Adjusted height for desktop */
+      }
+
+      /* Ensure crossword grid size on desktop is smaller */
+      .keyboard {
+        grid-template-columns: repeat(10, 1fr); /* 10 buttons per row */
+        gap: 8px;
+      }
+
+      .keyboard button {
+        font-size: 1.4em;
+        padding: 12px;
+        width: 45px;
+        height: 45px;
+      }
+    }
+
+    /* Prevent content from being hidden behind fixed elements */
     body {
-      padding-bottom: 100px; /* Avoid hidden content */
+      padding-top: 80px; /* Prevent hidden content under the clue bar */
     }
   </style>
 </head>
 
 <body>
-  <!-- Clue bar -->
+  <!-- Clue bar (fixed to top) -->
   <div class="clue-bar">
-    <p>Clue bar content here</p> <!-- Adjust as necessary -->
+    <p>Clue bar content here</p>
   </div>
 
   <main>
@@ -106,7 +152,7 @@
       If you log in, you can see the daily leaderboard for each puzzle you complete.
     </p>
 
-    <!-- Latest puzzle section -->
+    <!-- Latest puzzle -->
     <div id="latest-puzzle"></div>
 
     <h2>Archive</h2>
@@ -116,7 +162,7 @@
     </p>
 
     <ol id="archive">
-      <!-- Archive content will be populated here -->
+      <!-- Archive will be populated here -->
     </ol>
   </main>
 
