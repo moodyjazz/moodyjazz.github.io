@@ -99,14 +99,9 @@
     <p>play the most recent crossword, or scroll down for more. crosswords uploaded daily at 10 PM EST. there's a join function so you can play with friends too if you click the person icon with the plus symbol.  </p>
 <br>
 
-<h2>puzzle #2 04/08/2025</h2>
-<iframe
-    src="https://puzzleme.amuselabs.com/pmm/crossword?id=8b26a3a9&set=3b182fa908fd41c8de5b0521031deee43bc8eb30261764327be54172e6c82b2d&embed=1"
-    style="border:none; width: 100%; height: 600px;"
-    allow="web-share; fullscreen"
-    aria-label="Puzzle Me Game">
-</iframe>
-
+<div id="latest-puzzle">
+  <h2>Loading latest puzzle...</h2>
+</div>
 
     <br/>
    <h2>archive</h2>
@@ -120,27 +115,26 @@
   fetch('puzzles.json')
     .then(response => response.json())
     .then(data => {
-      const archiveList = document.getElementById('archive');
-      // Sort newest first
+      // Sort puzzles by date descending
       data.sort((a, b) => new Date(b.date) - new Date(a.date));
-      // Limit to latest 10
-      const recent = data.slice(0, 10);
-      recent.forEach(puzzle => {
-        const li = document.createElement('li');
-        const date = new Date(puzzle.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-        li.innerHTML = `
-          <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
-          <details>
-            <summary>jonathan's notes</summary>
-            <p>${puzzle.notes}</p>
-          </details>
-        `;
-        archiveList.appendChild(li);
-      });
+
+      const latest = data[0]; // Get the most recent puzzle
+      const latestPuzzleDiv = document.getElementById('latest-puzzle');
+      const date = new Date(latest.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+
+      latestPuzzleDiv.innerHTML = `
+        <h2>${latest.title} ${date}</h2>
+        <iframe
+          src="${latest.embedUrl}"
+          style="border:none; width: 100%; height: 600px;"
+          allow="web-share; fullscreen"
+          aria-label="Latest Puzzle">
+        </iframe>
+      `;
     })
     .catch(error => {
-      document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
-      console.error('Error fetching puzzle list:', error);
+      document.getElementById('latest-puzzle').innerHTML = '<h2>Unable to load the latest puzzle.</h2>';
+      console.error('Error loading latest puzzle:', error);
     });
 </script>
 
