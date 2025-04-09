@@ -105,16 +105,19 @@
     .then(response => response.json())
     .then(data => {
       const archiveList = document.getElementById('archive');
+      const latestPuzzleContainer = document.getElementById('latest-puzzle');
+
       // Sort newest first
       data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
       const today = data[0]; // most recent puzzle
 
-      // ✅ Show today's puzzle at the top
+      // ✅ Insert today's puzzle
       const mainPuzzleDate = new Date(today.date).toLocaleDateString(undefined, {
         year: 'numeric', month: 'short', day: 'numeric'
       });
-      const mainPuzzleHTML = `
+
+      latestPuzzleContainer.innerHTML = `
         <h2>${today.title} ${mainPuzzleDate}</h2>
         <iframe
           src="${today.iframe}"
@@ -123,11 +126,9 @@
           aria-label="Puzzle Me Game">
         </iframe>
       `;
-      const body = document.querySelector('body');
-      body.insertAdjacentHTML('afterbegin', mainPuzzleHTML); // adds today's puzzle to the top
 
-      // 🗃️ Build archive, skipping the first (most recent) puzzle
-      const archive = data.slice(1, 11); // skip today’s puzzle
+      // 📚 Build archive (skip today's puzzle)
+      const archive = data.slice(1, 11);
       archive.forEach(puzzle => {
         const li = document.createElement('li');
         const date = new Date(puzzle.date).toLocaleDateString(undefined, {
@@ -146,7 +147,10 @@
       });
     })
     .catch(error => {
-      document.getElementById('
+      document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
+      console.error('Error fetching puzzle list:', error);
+    });
+</script>
 
 </body>
 </html>
