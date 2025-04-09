@@ -127,14 +127,18 @@
       const recent = data.slice(0, 10);
       recent.forEach(puzzle => {
         const li = document.createElement('li');
-        const date = new Date(puzzle.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-        li.innerHTML = 
-            <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
+        const date = new Date(puzzle.date).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+        li.innerHTML = `
+          <a href="${puzzle.filename}">${puzzle.title}</a> ${date}
           <details>
             <summary>jonathan's notes</summary>
             <p>${puzzle.notes}</p>
           </details>
-        ;
+        `;
         archiveList.appendChild(li);
       });
     })
@@ -143,6 +147,7 @@
       console.error('Error fetching puzzle list:', error);
     });
 </script>
+
 
 </body>
 </html>
