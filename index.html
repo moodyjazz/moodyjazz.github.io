@@ -113,7 +113,7 @@
       const today = data[0]; // most recent puzzle
 
       // ✅ Insert today's puzzle
-      const mainPuzzleDate = new Date(today.date).toLocaleDateString(undefined, {
+      const mainPuzzleDate = new Date(today.date + "T00:00:00Z").toLocaleDateString(undefined, {
         year: 'numeric', month: 'short', day: 'numeric'
       });
 
@@ -131,7 +131,7 @@
       const archive = data.slice(1, 11);
       archive.forEach(puzzle => {
         const li = document.createElement('li');
-        const date = new Date(puzzle.date).toLocaleDateString(undefined, {
+        const date = new Date(puzzle.date + "T00:00:00Z").toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'short',
           day: 'numeric'
