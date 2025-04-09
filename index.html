@@ -114,17 +114,20 @@
 
       // Log the raw date and the parsed date
       console.log("Raw Date:", today.date);
-      const mainPuzzleDate = new Date(today.date + "T00:00:00Z"); // Convert to UTC
-      console.log("Parsed Date:", mainPuzzleDate);
+
+      // Convert date to UTC
+      const mainPuzzleDate = new Date(today.date + "T00:00:00Z"); // Force UTC
+      console.log("Parsed Date (UTC):", mainPuzzleDate);
       
-      // Use UTC for date formatting
+      // Use UTC formatting for date
       const formattedDate = mainPuzzleDate.toLocaleDateString("en-US", {
+        timeZone: 'UTC',  // Explicitly set to UTC
         year: 'numeric',
         month: 'short',
         day: 'numeric'
       });
 
-      console.log("Formatted Date:", formattedDate);  // Log formatted date
+      console.log("Formatted Date (UTC):", formattedDate);  // Log formatted date
 
       latestPuzzleContainer.innerHTML = `
         <h2>${today.title} ${formattedDate}</h2>
@@ -142,6 +145,7 @@
         const li = document.createElement('li');
         const date = new Date(puzzle.date + "T00:00:00Z"); // Convert to UTC
         const formattedDate = date.toLocaleDateString("en-US", {
+          timeZone: 'UTC',  // Explicitly set to UTC
           year: 'numeric',
           month: 'short',
           day: 'numeric'
@@ -161,6 +165,7 @@
       console.error('Error fetching puzzle list:', error);
     });
 </script>
+
 
 
 
