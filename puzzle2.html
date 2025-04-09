@@ -3,28 +3,161 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Embedded Crossword</title>
+  <title>moody jazz minis</title>
+
   <style>
+    /* General styles for body and page */
     body, html {
       margin: 0;
       padding: 0;
       height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     }
 
+    body {
+      background-color: #e6f0fa; /* Light blue background */
+      color: #111;
+      line-height: 1.6;
+    }
+
+    /* Centering crossword container */
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      padding: 10px 0;
+    }
+
+    /* For the crossword iframe */
     iframe {
       width: 100%;
-      height: 90vh;
+      height: 75vh; /* Set a responsive height for the crossword iframe */
       border: none;
+      margin-bottom: 20px; /* Adjust bottom margin if needed */
+    }
+
+    /* Clue bar styles */
+    .clue-bar {
+      height: 60px; /* Default height for clue bar */
+      background-color: #f4f4f4; /* Light background color */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2em;
+      padding: 10px;
+      width: 100%;
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 600px) {
+      /* Adjust the crossword iframe for mobile */
+      iframe {
+        height: 65vh; /* Reduce the height slightly for mobile */
+      }
+
+      /* Adjust the clue bar size on mobile */
+      .clue-bar {
+        height: 50px; /* Smaller height for mobile */
+        font-size: 1em; /* Adjust font size inside clue bar */
+        padding: 5px 10px; /* Less padding for mobile fit */
+      }
+
+      /* Adjust the keyboard size for mobile */
+      .keyboard {
+        font-size: 1.2em; /* Larger keys for better mobile usability */
+        grid-template-columns: repeat(10, 1fr); /* Ensure keyboard fits across the screen */
+        gap: 5px; /* Adjust the gap between keys */
+      }
+
+      /* Ensure buttons fit well on mobile */
+      .keyboard button {
+        padding: 10px; /* Larger buttons for easier touch interaction */
+      }
+    }
+
+    /* Ensure content doesn't get hidden behind fixed elements */
+    body {
+      padding-bottom: 100px; /* Avoid hidden content */
     }
   </style>
 </head>
+
 <body>
-  <iframe 
-    src="https://crosshare.org/crosswords/5DqNDSJ9OpuEwGX2rs96/moodyjazz-mini-2?leaderboard=true"  <!-- Add leaderboard=true -->
-    frameborder="0" 
-    allowfullscreen="true" 
-    allowtransparency="true" 
-    allow="clipboard-write *">
-  </iframe>
+  <main>
+    <h1>moody jazz minis</h1>
+    <p>
+      Play the most recent crossword, or scroll down for more. <strong>Crosswords uploaded daily at 10 PM EST.</strong>
+      If you log in, you can see the daily leaderboard for each puzzle you complete.
+    </p>
+
+    <!-- Latest puzzle section -->
+    <div id="latest-puzzle"></div>
+
+    <h2>Archive</h2>
+    <p>
+      Click the <u><b>puzzle</b></u> to play. Click <b>Jonathan's notes</b> for commentary — please note there may be <b>spoilers</b>.
+      Open at your own discretion.
+    </p>
+
+    <ol id="archive">
+      <!-- Archive content will be populated here -->
+    </ol>
+  </main>
+
+  <script>
+    fetch('puzzles.json')
+      .then(response => response.json())
+      .then(data => {
+        const archiveList = document.getElementById('archive');
+        const latestPuzzleContainer = document.getElementById('latest-puzzle');
+
+        data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const today = data[0];
+
+        const mainPuzzleDate = new Date(today.date + "T00:00:00Z");
+        const formattedDate = mainPuzzleDate.toLocaleDateString("en-US", {
+          timeZone: 'UTC',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+
+        latestPuzzleContainer.innerHTML = `
+          <h2>${today.title} – ${formattedDate}</h2>
+          <iframe
+            src="${today.iframe}"
+            allow="web-share; fullscreen"
+            aria-label="Puzzle Me Game">
+          </iframe>
+        `;
+
+        const archive = data.slice(1, 11);
+        archive.forEach(puzzle => {
+          const li = document.createElement('li');
+          const date = new Date(puzzle.date + "T00:00:00Z");
+          const formatted = date.toLocaleDateString("en-US", {
+            timeZone: 'UTC',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+
+          li.innerHTML = `
+            <a href="${puzzle.filename}">${puzzle.title}</a> – ${formatted}
+            <details>
+              <summary>Jonathan's notes</summary>
+              <p>${puzzle.notes}</p>
+            </details>
+          `;
+          archiveList.appendChild(li);
+        });
+      })
+      .catch(error => {
+        document.getElementById('archive').innerHTML = '<li>Error loading archive.</li>';
+        console.error('Error fetching puzzle list:', error);
+      });
+  </script>
 </body>
 </html>
