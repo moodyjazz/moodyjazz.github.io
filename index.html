@@ -2,92 +2,138 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>moody jazz minis</title>
 
   <style>
-    body, html {
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-    }
-
-    /* Body styling */
-    body {
       background-color: #e6f0fa; /* Light blue background */
       color: #111;
       line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      height: 100%;
+    }
+
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #ccc; /* Thin divider */
+      padding: 15px 40px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.9em;
+      font-family: Georgia, serif;
+      font-weight: normal;
     }
 
     main {
-      width: 100%;
-      padding: 20px;
-      overflow-y: auto;
+      padding: 30px 40px;
+    }
+
+    h2 {
+      font-family: Georgia, serif;
+      font-weight: normal;
+      margin: 30px 0 10px;
+      text-align: left;
+    }
+
+    p {
+      margin: 0 0 20px;
+      text-align: left;
+      max-width: 800px;
     }
 
     iframe {
       width: 100%;
-      height: 70vh;
+      height: 100vh; /* Adjust to fill the height of the screen */
       border: none;
-      margin-bottom: 20px;
+      display: block;
+      margin: 0 auto;
     }
 
-    /* Mobile-specific keyboard tweaks */
+    ol {
+      list-style-type: decimal;
+      padding-left: 40px;
+      margin: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    a {
+      color: #0000ee;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    details summary {
+      cursor: pointer;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    details[open] p {
+      margin-top: 5px;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    /* Custom styles for mobile */
     @media (max-width: 600px) {
+      header, main {
+        padding: 10px 20px;
+      }
+
+      header h1 {
+        font-size: 1.5em;
+      }
+
+      h2 {
+        font-size: 1.2em;
+      }
+
       iframe {
-        height: 60vh;
+        height: 90vh; /* Make the iframe smaller to accommodate keyboard */
+        width: 100vw; /* Full width on mobile */
+        margin-top: 0; /* Remove any default margin */
       }
 
-      .keyboard {
-        grid-template-columns: repeat(9, 1fr);
-        gap: 6px;
-      }
-
-      .keyboard button {
-        font-size: 1.3em;
-        padding: 12px;
-        width: 35px;
-        height: 35px;
+      p {
+        max-width: none; /* Remove max-width to make sure text stretches to full screen */
       }
     }
 
-    /* Desktop-specific tweaks */
-    @media (min-width: 601px) {
-      iframe {
-        height: 65vh;
-      }
-
-      .keyboard button {
-        font-size: 1.4em;
-        padding: 12px;
-        width: 45px;
-        height: 45px;
-      }
+    body::after {
+      content: '';
+      display: block;
+      height: 100px;
     }
   </style>
 </head>
 
 <body>
-  <main>
+  <header>
     <h1>moody jazz minis</h1>
+  </header>
+
+  <main>
     <p>
-      Play the most recent crossword, or scroll down for more. <strong>Crosswords uploaded daily at 10 PM EST.</strong>
-      If you log in, you can see the daily leaderboard for each puzzle you complete.
+      play the most recent crossword, or scroll down for more. 
+      <strong>crosswords uploaded daily at 10 PM EST.</strong> if you login, you can see the daily leaderboard for each puzzle you complete.
     </p>
 
-    <!-- Latest puzzle -->
+    <!-- 🔥 Latest puzzle goes here -->
     <div id="latest-puzzle"></div>
 
-    <h2>Archive</h2>
+    <h2>archive</h2>
     <p>
-      Click the <u><b>puzzle</b></u> to play. Click <b>Jonathan's notes</b> for commentary — please note there may be <b>spoilers</b>.
-      Open at your own discretion.
+      click the <u><b>puzzle</b></u> to play. click <b>jonathan's notes</b> for commentary — please note there may be <b>spoilers</b>. open at your own discretion
     </p>
 
     <ol id="archive">
@@ -116,7 +162,7 @@
         latestPuzzleContainer.innerHTML = `
           <h2>${today.title} – ${formattedDate}</h2>
           <iframe
-            src="${today.iframe}"
+            src="${today.iframe}?leaderboard=1"
             allow="web-share; fullscreen"
             aria-label="Puzzle Me Game">
           </iframe>
@@ -136,7 +182,7 @@
           li.innerHTML = `
             <a href="${puzzle.filename}">${puzzle.title}</a> – ${formatted}
             <details>
-              <summary>Jonathan's notes</summary>
+              <summary>jonathan's notes</summary>
               <p>${puzzle.notes}</p>
             </details>
           `;
@@ -150,4 +196,3 @@
   </script>
 </body>
 </html>
-
