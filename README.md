@@ -13,7 +13,7 @@ git clone git@github.com:moodyjazz/moodyjazz.github.io.git
 To run the script:
 
 ```
-python publish.py
+py publish.py
 ```
 
 It will prompt you then for the crossword information. 
@@ -23,6 +23,14 @@ The script will then update the local repo with the updated puzzles.json and the
 To push the changes to remote repository:
 ```
 git add .
-git commit "Add next puzzle"
+git commit -m "Add next puzzle"
 git push origin main
 ```
+
+If you need to reset your working directory:
+```
+git clean -f
+git checkout .
+```
+Git clean removes untracked files. Git checkout resets tracked files.
+
