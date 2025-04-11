@@ -34,3 +34,8 @@ git checkout .
 ```
 Git clean removes untracked files. Git checkout resets tracked files.
 
+If your local is out-of-date with remote:
+```
+git pull origin main
+```
+
